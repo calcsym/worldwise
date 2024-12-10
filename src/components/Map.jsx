@@ -9,7 +9,7 @@ import {
   useMap,
   useMapEvents,
 } from "react-leaflet";
-import { useCities } from "../contexts/CitiesContext";
+import { useCities } from "../contexts/CitiesContext-1";
 import { useGeolocation } from "../hooks/useGeolocation";
 import { useUrlPosition } from "../hooks/useUrlPosition";
 import Button from "./Button";
@@ -50,7 +50,6 @@ function Map() {
       )}
       <MapContainer
         center={mapPosition}
-        //center={[mapLat, mapLng]}
         zoom={7}
         scrollWheelZoom={true}
         className={styles.map}

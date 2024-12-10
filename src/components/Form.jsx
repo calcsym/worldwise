@@ -6,7 +6,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import styles from "./Form.module.css";
 
 import { useUrlPosition } from "../hooks/useUrlPosition";
-import { useCities } from "../contexts/CitiesContext";
+import { useCities } from "../contexts/CitiesContext-1";
 import { useNavigate } from "react-router-dom";
 
 import Button from "./Button";
@@ -112,11 +112,7 @@ function Form() {
 
       <div className={styles.row}>
         <label htmlFor="date">When did you go to {cityName}?</label>
-        {/*<input
-          id="date"
-          onChange={(e) => setDate(e.target.value)}
-          value={date}
-         />*/}
+
         <DatePicker
           id="date"
           onChange={(date) => setDate(date)}

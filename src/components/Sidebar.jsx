@@ -3,7 +3,7 @@ import Logo from "./Logo";
 import AppNav from "./AppNav";
 import styles from "./Sidebar.module.css";
 
-function SideBar() {
+function Sidebar() {
   return (
     <div className={styles.sidebar}>
       <Logo />
@@ -20,4 +20,4 @@ function SideBar() {
   );
 }
 
-export default SideBar;
+export default Sidebar;

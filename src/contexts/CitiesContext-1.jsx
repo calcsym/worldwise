@@ -17,6 +17,7 @@ const initialState = {
   error: "",
 };
 
+//setCities
 function reducer(state, action) {
   switch (action.type) {
     case "loading":
@@ -30,7 +31,11 @@ function reducer(state, action) {
       };
 
     case "city/loaded":
-      return { ...state, isLoading: false, currentCity: action.payload };
+      return {
+        ...state,
+        isLoading: false,
+        currentCity: action.payload,
+      };
 
     case "city/created":
       return {
@@ -49,22 +54,22 @@ function reducer(state, action) {
       };
 
     case "rejected":
-      return {
-        ...state,
-        isLoading: false,
-        error: action.payload,
-      };
+      return { ...state, isLoading: false, error: action.payload };
 
     default:
-      throw new Error("Unknown action type");
+      throw new Error("Unknown action type.");
   }
 }
 
+// Provider component as the top level component in the app component
 function CitiesProvider({ children }) {
   const [{ cities, isLoading, currentCity, error }, dispatch] = useReducer(
     reducer,
     initialState
   );
+  //const [cities, setCities] = useState([]);
+  //const [isLoading, setIsLoading] = useState(false);
+  //const [currentCity, setCurrentCity] = useState({});
 
   useEffect(function () {
     async function fetchCities() {
@@ -84,25 +89,23 @@ function CitiesProvider({ children }) {
     fetchCities();
   }, []);
 
-  const getCity = useCallback(
-    async function getCity(id) {
-      if (Number(id) === currentCity.id) return;
+  async function getCity(id) {
+    if (Number(id) === currentCity.id) return;
+    dispatch({ type: "loading" });
 
-      dispatch({ type: "loading" });
-
-      try {
-        const res = await fetch(`${BASE_URL}/cities/${id}`);
-        const data = await res.json();
-        dispatch({ type: "city/loaded", payload: data });
-      } catch {
-        dispatch({
-          type: "rejected",
-          payload: "There was an error loading the city...",
-        });
-      }
-    },
-    [currentCity.id]
-  );
+    try {
+      //setIsLoading(true);
+      const res = await fetch(`${BASE_URL}/cities/${id}`);
+      const data = await res.json();
+      //setCurrentCity(data);
+      dispatch({ type: "city/loaded", payload: data });
+    } catch {
+      dispatch({
+        type: "rejected",
+        payload: "There was an error loading the city...",
+      });
+    }
+  }
 
   async function createCity(newCity) {
     dispatch({ type: "loading" });
@@ -116,6 +119,7 @@ function CitiesProvider({ children }) {
         },
       });
       const data = await res.json();
+      //setCities((cities) => [...cities, data]);
 
       dispatch({ type: "city/created", payload: data });
     } catch {
@@ -133,7 +137,7 @@ function CitiesProvider({ children }) {
       await fetch(`${BASE_URL}/cities/${id}`, {
         method: "DELETE",
       });
-
+      //setCities((cities) => cities.filter((city) => city.id !== id));
       dispatch({ type: "city/deleted", payload: id });
     } catch {
       dispatch({
@@ -148,8 +152,8 @@ function CitiesProvider({ children }) {
       value={{
         cities,
         isLoading,
-        currentCity,
         error,
+        currentCity,
         getCity,
         createCity,
         deleteCity,
@@ -160,8 +164,9 @@ function CitiesProvider({ children }) {
   );
 }
 
+// Consumer
 function useCities() {
-  const context = useContext(CitiesContext);
+  const context = useContext(CitiesContext); // specified the context.
   if (context === undefined)
     throw new Error("CitiesContext was used outside the CitiesProvider");
   return context;
